@@ -46,7 +46,7 @@ def search_song_by_lyrics(lyrics, access_token):
 
 # Example usage
 def main():
-    lyrics = "I get those goosebumps everytime"
+    lyrics = "I grott those goosebumps everytime"
     access_token = os.getenv("GENIUS_ACCESS_TOKEN")
     
     result = search_song_by_lyrics(lyrics, access_token)
