@@ -1,0 +1,108 @@
+.voice-recorder-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .instruction {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+  }
+  
+  .record-button {
+    display: block;
+    margin: 0 auto 30px;
+    padding: 15px 30px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .record-button:hover {
+    background-color: #2980b9;
+  }
+  
+  .record-button.recording {
+    background-color: #e74c3c;
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+    }
+  }
+  
+  .recording-container, .transcription-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recording-container h2, .transcription-container h2 {
+    margin-top: 0;
+    color: #34495e;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  .audio-player {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .transcribe-button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .transcribe-button:hover {
+    background-color: #27ae60;
+  }
+  
+  .transcribe-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+  }
+  
+  .transcription-text {
+    font-style: italic;
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .error-container {
+    background-color: #fadbd8;
+    color: #c0392b;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+  }

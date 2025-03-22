@@ -1,0 +1,77 @@
+.song-match-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    padding: 10px;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 3px solid #e74c3c;
+    border-radius: 4px;
+  }
+  
+  .song-result h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  
+  .song-details {
+    display: flex;
+    margin-bottom: 25px;
+  }
+  
+  .song-artwork {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .song-info {
+    margin-left: 20px;
+    flex: 1;
+  }
+  
+  .song-info h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+  }
+  
+  .song-info p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .genius-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #FFFF64;
+    color: #000;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+  
+  .genius-link:hover {
+    background-color: #E6E658;
+  }
+  
+  .spotify-player {
+    margin-top: 20px;
+  }
+  
+  .spotify-player h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }

@@ -1,15 +1,11 @@
-import './App.css';
+import React from 'react';
 import VoiceRecorder from './components/VoiceRecorder';
-
+import './App.css';
 
 function App() {
   return (
     <div className="App">
-    
-    <h1>Lyra - Voice to Text</h1>
-
-    <VoiceRecorder></VoiceRecorder> 
-
+      <VoiceRecorder />
     </div>
   );
 }
