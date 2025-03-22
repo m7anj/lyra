@@ -1,4 +1,5 @@
 import './App.css';
+import VoiceRecorder from './components/VoiceRecorder';
 
 
 function App() {
@@ -6,7 +7,8 @@ function App() {
     <div className="App">
     
     <h1>Lyra - Voice to Text</h1>
-    <h2></h2>
+
+    <VoiceRecorder></VoiceRecorder> 
 
     </div>
   );
