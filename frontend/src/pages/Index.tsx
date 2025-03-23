@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import RecordButton from '@/components/RecordButton';
@@ -8,10 +7,16 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [selectedSong, setSelectedSong] = useState<any>(null);
 
   const handleSearchComplete = (results: any[]) => {
     setSearchResults(results);
-    // Scroll to results after a short delay to allow for animation
+    
+    // If there are results, set the first one as the selected song
+    if (results && results.length > 0) {
+      setSelectedSong(results[0]);
+    }
+    
     setTimeout(() => {
       window.scrollTo({
         top: window.innerHeight * 0.5,
@@ -46,7 +51,8 @@ const Index = () => {
               <SearchResults results={searchResults} />
             )}
             
-            <PlaylistCreator />
+            {/* Pass the selected song to PlaylistCreator */}
+            <PlaylistCreator songData={selectedSong} />
             
             <section className="py-16 md:py-24 px-4 sm:px-6 max-w-6xl mx-auto" id="about">
               <div className="flex flex-col md:flex-row items-center gap-12">
@@ -70,7 +76,7 @@ const Index = () => {
                     <div className="absolute -inset-4 bg-gradient-to-r from-lyra-pink-light to-lyra-orange-light rounded-2xl blur-3xl opacity-30 animate-pulse"></div>
                     <div className="relative w-full aspect-square max-w-md mx-auto rounded-2xl overflow-hidden shadow-lg">
                       <img 
-                        src="https://png.pngtree.com/thumb_back/fw800/background/20220803/pngtree-a-young-man-enjoying-music-with-headphones-and-phone-photo-image_47881970.jpg" 
+                        src="https://i.gzn.jp/img/2023/03/11/knowing-like-song-seconds/00.jpg" 
                         alt="Person enjoying music" 
                         className="w-full h-full object-cover"
                       />

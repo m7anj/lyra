@@ -28,7 +28,7 @@ const RecordButton = ({ onSearchComplete }: { onSearchComplete: (results: any[])
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         await processAudio(audioBlob);
         
-        // Stop all tracks from the stream to release the microphone
+        
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -59,7 +59,7 @@ const RecordButton = ({ onSearchComplete }: { onSearchComplete: (results: any[])
 
   const processAudio = async (audioBlob: Blob) => {
     try {
-      // Step 1: Send audio to the backend for transcription
+      // Transcribe audio
       const formData = new FormData();
       formData.append('audio', audioBlob);
       
@@ -81,7 +81,7 @@ const RecordButton = ({ onSearchComplete }: { onSearchComplete: (results: any[])
 
       console.log('Transcribed lyrics:', lyrics);
 
-      // Step 2: Search for the song using the transcribed lyrics
+      // Search song
       const songSearchResponse = await fetch(`${API_URL}/api/search-song`, {
         method: 'POST',
         headers: {
@@ -96,7 +96,7 @@ const RecordButton = ({ onSearchComplete }: { onSearchComplete: (results: any[])
 
       const songData = await songSearchResponse.json();
       
-      // Step 3: Get Spotify information for the song
+      // Spotify info
       const spotifyResponse = await fetch(`${API_URL}/api/search-spotify`, {
         method: 'POST',
         headers: {
@@ -114,7 +114,7 @@ const RecordButton = ({ onSearchComplete }: { onSearchComplete: (results: any[])
         spotifyData = await spotifyResponse.json();
       }
       
-      // Format the results for the UI
+      //Formatting
       const results = [
         {
           id: songData.id,
@@ -128,7 +128,7 @@ const RecordButton = ({ onSearchComplete }: { onSearchComplete: (results: any[])
         }
       ];
       
-      console.log("Spotify track data:", spotifyData); // Debug Spotify data
+      console.log("Spotify track data:", spotifyData); 
       
       // Add similar songs if available
       if (songData.similar_songs && songData.similar_songs.length > 0) {

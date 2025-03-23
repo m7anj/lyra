@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Music, Loader2 } from 'lucide-react';
 
 import { API_URL } from '@/config';
 
@@ -15,50 +15,84 @@ interface Song {
   spotifyUrl?: string;
 }
 
+interface PlaylistTrack {
+  id: string;
+  name: string;
+  artist: string;
+  album: string;
+  albumArt: string;
+  previewUrl: string | null;
+  externalUrl: string;
+}
+
 const SearchResults = ({ results }: { results: Song[] }) => {
   const [creatingPlaylist, setCreatingPlaylist] = useState(false);
   const [playlistCreated, setPlaylistCreated] = useState(false);
   const [playlistError, setPlaylistError] = useState<string | null>(null);
+  const [playlist, setPlaylist] = useState<PlaylistTrack[]>([]);
   
   const handleCreatePlaylist = async () => {
     setCreatingPlaylist(true);
     setPlaylistError(null);
+    setPlaylist([]);
     
     try {
       if (!results[0].spotifyId) {
         throw new Error('Spotify data not available for this song');
       }
       
-      // In a real implementation, you would call an API endpoint to create a playlist
-      // For now, we'll simulate it with a timeout
+      // Call the backend API to create a playlist
+      const response = await fetch('/api/create-playlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          trackId: results[0].spotifyId,
+          limit: 10
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create playlist');
+      }
+
+      const data = await response.json();
+      setPlaylist(data.playlist);
+      setPlaylistCreated(true);
+      
+      // Scroll to the playlist section
       setTimeout(() => {
-        setCreatingPlaylist(false);
-        setPlaylistCreated(true);
-        setTimeout(() => setPlaylistCreated(false), 3000);
-      }, 2000);
+        const playlistSection = document.getElementById('playlist-section');
+        if (playlistSection) {
+          playlistSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
     } catch (err: any) {
       console.error('Error creating playlist:', err);
       setPlaylistError(err.message || 'Failed to create playlist');
+    } finally {
       setCreatingPlaylist(false);
     }
   };
   
   const handleListenNow = (song: Song) => {
     if (song.spotifyId) {
-      // Create an iframe with the Spotify embed
+      // Spotify embed
       const container = document.createElement('div');
-      // Create the iframe element properly
+      
       const iframe = document.createElement('iframe');
       iframe.src = `https://open.spotify.com/embed/track/${song.spotifyId}`;
       iframe.width = "100%";
       iframe.height = "80";
       iframe.frameBorder = "0";
       iframe.allow = "encrypted-media";
-      iframe.setAttribute('allowTransparency', 'true'); // Using setAttribute to avoid type issues
+      iframe.setAttribute('allowTransparency', 'true'); 
       
       container.appendChild(iframe);
       
-      // Find the player container or create one if it doesn't exist
+      
       let playerContainer = document.getElementById('spotify-player-container');
       if (!playerContainer) {
         playerContainer = document.createElement('div');
@@ -72,11 +106,11 @@ const SearchResults = ({ results }: { results: Song[] }) => {
         }
       }
       
-      // Clear any existing content and add the new iframe
+      
       playerContainer.innerHTML = '';
       playerContainer.appendChild(container.firstChild as Node);
     } else if (song.spotifyUrl) {
-      // Fallback to opening the URL if no spotifyId is available
+      // If no spotifyId is available
       window.open(song.spotifyUrl, '_blank');
     }
   };
@@ -103,24 +137,23 @@ const SearchResults = ({ results }: { results: Song[] }) => {
             <p className="text-sm text-muted-foreground mt-1">{results[0].album} • {results[0].year}</p>
             
             <div className="mt-6 flex flex-wrap gap-3">
-              {playlistCreated ? (
-                <div className="bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium animate-fade-in">
-                  Playlist created successfully!
-                </div>
-              ) : (
-                <Button 
-                  onClick={handleCreatePlaylist}
-                  disabled={creatingPlaylist || !results[0].spotifyId}
-                  className="bg-gradient-to-r from-lyra-pink to-lyra-orange text-white hover:opacity-90 transition-opacity rounded-full px-6"
-                >
-                  {creatingPlaylist ? (
-                    <>
-                      <span className="mr-2">Creating playlist</span>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    </>
-                  ) : "Create similar songs playlist"}
-                </Button>
-              )}
+              <Button 
+                onClick={handleCreatePlaylist}
+                disabled={creatingPlaylist || !results[0].spotifyId}
+                className="bg-gradient-to-r from-lyra-pink to-lyra-orange text-white hover:opacity-90 transition-opacity rounded-full px-6"
+              >
+                {creatingPlaylist ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Creating playlist...
+                  </>
+                ) : (
+                  <>
+                    <Music className="mr-2 h-5 w-5" />
+                    Create similar songs playlist
+                  </>
+                )}
+              </Button>
               
               <Button 
                 variant="outline" 
@@ -184,7 +217,7 @@ const SearchResults = ({ results }: { results: Song[] }) => {
                       size="sm" 
                       className="text-muted-foreground hover:text-foreground hover:bg-transparent"
                       onClick={() => {
-                        // For secondary songs, directly open in Spotify
+                        // Directly open in Spotify
                         if (song.spotifyUrl) {
                           window.open(song.spotifyUrl, '_blank');
                         } else {
@@ -202,6 +235,54 @@ const SearchResults = ({ results }: { results: Song[] }) => {
           </>
         )}
       </div>
+      
+      {/* Generated Playlist Section */}
+      {playlist.length > 0 && (
+        <div id="playlist-section" className="mt-12 animate-fade-in">
+          <h3 className="text-2xl font-semibold mb-6 gradient-text">Your Personalized Playlist</h3>
+          
+          <div className="glass-card rounded-xl p-6 shadow-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {playlist.map((track) => (
+                <div key={track.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-lyra-pink-light transition-colors">
+                  <div className="w-16 h-16 rounded overflow-hidden shadow-sm">
+                    <img 
+                      src={track.albumArt || "https://via.placeholder.com/200"} 
+                      alt={`${track.name} album art`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h5 className="text-sm font-medium truncate">{track.name}</h5>
+                    <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
+                    <div className="flex items-center gap-3 mt-1">
+                      {track.previewUrl && (
+                        <a 
+                          href={track.previewUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-lyra-pink hover:underline flex items-center"
+                        >
+                          Preview
+                        </a>
+                      )}
+                      <a 
+                        href={track.externalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-lyra-pink hover:underline flex items-center"
+                      >
+                        Spotify <ExternalLink className="ml-1 h-3 w-3" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
