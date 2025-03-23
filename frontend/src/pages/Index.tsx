@@ -70,7 +70,7 @@ const Index = () => {
                     <div className="absolute -inset-4 bg-gradient-to-r from-lyra-pink-light to-lyra-orange-light rounded-2xl blur-3xl opacity-30 animate-pulse"></div>
                     <div className="relative w-full aspect-square max-w-md mx-auto rounded-2xl overflow-hidden shadow-lg">
                       <img 
-                        src="https://via.placeholder.com/500x500" 
+                        src="https://png.pngtree.com/thumb_back/fw800/background/20220803/pngtree-a-young-man-enjoying-music-with-headphones-and-phone-photo-image_47881970.jpg" 
                         alt="Person enjoying music" 
                         className="w-full h-full object-cover"
                       />
